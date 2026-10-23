@@ -1,0 +1,67 @@
+flowchart TD
+    subgraph "项目架构：流式对话工具链"
+        direction TB
+        
+        %% 迭代版本演进
+        Practice01["Practice01/chat.py<br/>基础流式对话"]
+        Practice02_isLeapYear["Practice02/chat-stream-tool-isLeapYear.py<br/>新增闰年判断工具"]
+        Practice02_fileOps["Practice02/chat-stream-tool-fileOps.py<br/>新增 10 个文件操作工具"]
+        
+        Practice01 -->|迭代扩展| Practice02_isLeapYear
+        Practice02_isLeapYear -->|迭代扩展| Practice02_fileOps
+        
+        %% 工具列表
+        tools["工具函数模块"]
+        
+        getDate["getDate<br/>获取当前日期时间"]
+        isLeapYear["isLeapYear<br/>判断闰年"]
+        getCwd["getCwd<br/>获取当前工作目录"]
+        listDir["listDir<br/>列出目录下文件/子目录"]
+        getFileType["getFileType<br/>获取文件/目录类型"]
+        readTextFile["readTextFile<br/>读取文本文件内容"]
+        createFile["createFile<br/>创建新文件"]
+        editTextFile["editTextFile<br/>编辑文本文件（覆盖/追加）"]
+        createDir["createDir<br/>创建目录（支持多级）"]
+        deleteDir["deleteDir<br/>删除目录（递归/非递归）"]
+        deleteFile["deleteFile<br/>删除文件"]
+        renamePath["renamePath<br/>重命名文件或目录"]
+        
+        Practice01 --> getDate
+        Practice02_isLeapYear --> getDate
+        Practice02_isLeapYear --> isLeapYear
+        Practice02_fileOps --> getDate
+        Practice02_fileOps --> isLeapYear
+        Practice02_fileOps --> getCwd
+        Practice02_fileOps --> listDir
+        Practice02_fileOps --> getFileType
+        Practice02_fileOps --> readTextFile
+        Practice02_fileOps --> createFile
+        Practice02_fileOps --> editTextFile
+        Practice02_fileOps --> createDir
+        Practice02_fileOps --> deleteDir
+        Practice02_fileOps --> deleteFile
+        Practice02_fileOps --> renamePath
+        
+        %% 主程序流程
+        main["主程序<br/>stream_chat"]
+        stream["流式响应"]
+        
+        Practice01 --> main
+        Practice02_isLeapYear --> main
+        Practice02_fileOps --> main
+        
+        main --> stream
+    end
+    
+    tools -.-> getDate
+    tools -.-> isLeapYear
+    tools -.-> getCwd
+    tools -.-> listDir
+    tools -.-> getFileType
+    tools -.-> readTextFile
+    tools -.-> createFile
+    tools -.-> editTextFile
+    tools -.-> createDir
+    tools -.-> deleteDir
+    tools -.-> deleteFile
+    tools -.-> renamePath
