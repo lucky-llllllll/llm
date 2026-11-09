@@ -35,6 +35,8 @@ The MCP server reads these environment variables:
 - `MCP_HOST` — default `127.0.0.1`
 - `MCP_PORT` — default `9000`
 - `PET_HOSPITAL_BASE_URL` — default `http://127.0.0.1:8080`
+- `PET_HOSPITAL_TIMEOUT_SECONDS` — default `10.0`
+- `PET_HOSPITAL_MAX_RETRIES` — default `2`
 
 Example:
 
@@ -42,6 +44,8 @@ Example:
 export MCP_HOST=127.0.0.1
 export MCP_PORT=9000
 export PET_HOSPITAL_BASE_URL=http://127.0.0.1:8080
+export PET_HOSPITAL_TIMEOUT_SECONDS=15
+export PET_HOSPITAL_MAX_RETRIES=3
 ```
 
 ## Start the MCP service

@@ -1,2 +1,45 @@
+# 密钥、配置文件
 config.ini
+.env
+.env.local
+.env.*
+*.key
+*.pem
+*.secret
+
+# 缓存、Agent记忆目录
+.workbuddy/
+data/
+cache/
+tmp/
+temp/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+
+# Node / JS
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# 可执行文件、编译产物
 *.exe
+*.dll
+*.so
+*.bin
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db

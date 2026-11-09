@@ -1,0 +1,55 @@
+import json
+from core.llm import stream_chat
+from core.tools import TOOL_MAP, TOOLS
+
+class Agent:
+    def __init__(self):
+        self.chat_history = []
+
+    def add_user_msg(self, content: str):
+        self.chat_history.append({"role": "user", "content": content})
+
+    async def run(self, on_text, on_tool_log):
+        while True:
+            stream = stream_chat(self.chat_history, tools=TOOLS)
+            full_content = ""
+            tool_calls = []
+            for chunk in stream:
+                if not chunk.choices:
+                    continue
+                delta = chunk.choices[0].delta
+                if delta.content:
+                    full_content += delta.content
+                    await on_text(delta.content)
+                if delta.tool_calls:
+                    for tc in delta.tool_calls:
+                        idx = tc.index
+                        if idx >= len(tool_calls):
+                            tool_calls.append({"id": "", "name": "", "arguments": ""})
+                        if tc.id:
+                            tool_calls[idx]["id"] = tc.id
+                        if tc.function.name:
+                            tool_calls[idx]["name"] = tc.function.name
+                        if tc.function.arguments:
+                            tool_calls[idx]["arguments"] += tc.function.arguments
+            if not tool_calls:
+                self.chat_history.append({"role": "assistant", "content": full_content})
+                break
+            self.chat_history.append({"role": "assistant", "tool_calls": [
+                {
+                    "id": item["id"],
+                    "type": "function",
+                    "function": {"name": item["name"], "arguments": item["arguments"]}
+                }
+                for item in tool_calls
+            ]})
+            for item in tool_calls:
+                func_name = item["name"]
+                args = json.loads(item["arguments"])
+                await on_tool_log(f"调用工具：{func_name}，参数：{args}")
+                result = TOOL_MAP[func_name](**args)
+                self.chat_history.append({
+                    "role": "tool",
+                    "tool_call_id": item["id"],
+                    "content": str(result)
+                })
