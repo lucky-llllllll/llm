@@ -18,18 +18,24 @@
 <body>
   <main>
     <h1>上传文档到 AnythingLLM</h1>
+    <input id="key" type="password" placeholder="AnythingLLM API Key" aria-label="API Key">
     <input id="file" type="file" aria-label="选择文档">
     <button id="upload" type="button">上传并向量化</button>
     <div id="status" role="status">准备就绪</div>
   </main>
   <script>
     const api = 'http://localhost:3001/api/v1';
-    const key = 'BE4P46K-32N4M9K-GM22MGJ-ZW6A9EP';
     const fileInput = document.querySelector('#file');
+    const keyInput = document.querySelector('#key');
     const uploadButton = document.querySelector('#upload');
     const status = document.querySelector('#status');
 
     async function upload() {
+      const key = keyInput.value.trim();
+      if (!key) {
+        status.textContent = '请先填写 API Key（AnythingLLM 后台 → Developer API）';
+        return;
+      }
       const file = fileInput.files[0];
       if (!file) {
         status.textContent = '请先选择文档';
